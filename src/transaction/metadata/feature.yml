@@ -1,0 +1,18 @@
+feature: transaction
+
+variants:
+
+  clo_visa_only:
+    source_repo: consumer-service-adib
+
+  clo_mc_only:
+    source_repo: consumer-service
+
+  clo_visa_mc:
+    source_repo: consumer-service
+
+  blo_visa_only:
+    source_repo: consumer-service
+
+database:
+  - core-payout
