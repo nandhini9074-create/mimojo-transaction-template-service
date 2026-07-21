@@ -15,12 +15,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseResponse } from 'src/common/dtos/base-response';
 import { PayoutTransactionService } from '../services/payout-transaction.service';
-import { AppealDto } from '../dtos/appeal.dto';
-import { CustomerPiiDataDto } from '../dtos/customer-pii-data.dto';
-import { GetTransactionsDto } from '../dtos/get-transaction.dto';
-import { TransactionMerchantQueryDto } from '../dtos/transaction-details.dto';
-import { ApiEndpoint } from 'src/decorators/api-swagger';
-import { AppealDtoWithFile } from '../dtos/appeal-file.dto';
+import { AppealDto } from '../dto/appeal.dto';
+import { CustomerPiiDataDto } from '../dto/customer-pii-data.dto';
+import { GetTransactionsDto } from '../dto/get-transaction.dto';
+import { TransactionMerchantQueryDto } from '../dto/transaction-details.dto';
+import { ApiEndpoint } from '../../decorators/api-swagger';
+import { AppealDtoWithFile } from '../dto/appeal-file.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 @Controller('customers')

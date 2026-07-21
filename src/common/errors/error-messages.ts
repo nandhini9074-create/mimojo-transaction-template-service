@@ -65,4 +65,18 @@ export const ErrorMessages = {
       serverStatus: 4108,
     },
   },
+  adib: {
+    customerNotFound: {
+      message: 'Customer not found.',
+      serverStatus: 404,
+    },
+    transactionNotFound: {
+      message: 'Transaction not found.',
+      serverStatus: 404,
+    },
+    genericError: {
+      message: 'Something went wrong.',
+      serverStatus: 500,
+    }
+  }
 };

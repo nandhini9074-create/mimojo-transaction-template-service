@@ -69,9 +69,8 @@ export class PayoutTransactionService {
         this.logger.warn('PayoutTransactionService.getTransactionSummary - customer not found');
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.customerNotFound.message,
-          ErrorMessages.adib.customerNotFound.serverStatus
+          ErrorMessages.adib.customerNotFound.serverStatus,
+          ErrorMessages.adib.customerNotFound.message
         );
       }
 
@@ -97,7 +96,7 @@ export class PayoutTransactionService {
 
         formattedResult.nextPaydaySavings = null;
         formattedResult.currency = currencyValue;
-        return baseResponseHelper(formattedResult, traceId);
+        return baseResponseHelper(formattedResult);
       }
       const userCardsIds = userCards.map((card) => card?.id);
       const sumResult = await this.getSchemeWiseNextPaydayTotalOnUserBaseCurrency(
@@ -128,7 +127,7 @@ export class PayoutTransactionService {
 
       formattedResult.nextPaydaySavings = totalCashback ? Number(totalCashback.toFixed(2)) : 0.0;
       formattedResult.currency = currencyValue;
-      return baseResponseHelper(formattedResult, traceId);
+      return baseResponseHelper(formattedResult);
     } catch (error) {
       this.logger.error('PayoutTransactionService.getTransactionSummary - exception;', {
         error,
@@ -136,9 +135,8 @@ export class PayoutTransactionService {
       });
       return baseResponseHelper(
         {},
-        traceId,
-        ErrorMessages.adib.genericError.message,
-        ErrorMessages.adib.genericError.serverStatus
+        ErrorMessages.adib.genericError.serverStatus,
+        ErrorMessages.adib.genericError.message
       );
     }
   }
@@ -176,9 +174,8 @@ export class PayoutTransactionService {
         this.logger.warn('PayoutTransactionService.getAllTransactionForUserCards - customer not found');
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.customerNotFound.message,
-          ErrorMessages.adib.customerNotFound.serverStatus
+          ErrorMessages.adib.customerNotFound.serverStatus,
+          ErrorMessages.adib.customerNotFound.message
         );
       }
 
@@ -250,7 +247,7 @@ export class PayoutTransactionService {
         };
       }
 
-      return baseResponseHelper(response, traceId);
+      return baseResponseHelper(response);
     } catch (error) {
       this.logger.error('PayoutTransactionService.getAllTransactionForUserCards - exception;', {
         error,
@@ -260,9 +257,8 @@ export class PayoutTransactionService {
       });
       return baseResponseHelper(
         {},
-        traceId,
-        ErrorMessages.adib.genericError.message,
-        ErrorMessages.adib.genericError.serverStatus
+        ErrorMessages.adib.genericError.serverStatus,
+        ErrorMessages.adib.genericError.message
       );
     }
   }
@@ -312,22 +308,21 @@ export class PayoutTransactionService {
         this.logger.warn("PayoutTransactionService.getAllCardsForCustomer - customer not found");
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.customerNotFound.message,
-          ErrorMessages.adib.customerNotFound.serverStatus
+          ErrorMessages.adib.customerNotFound.serverStatus,
+          ErrorMessages.adib.customerNotFound.message
         );
       }
 
       const cards = await this.cmsProxy.getUserCards(consumerId);
       if (cards?.length === 0) {
-        return baseResponseHelper({}, traceId);
+        return baseResponseHelper({});
       }
       const cardIds = cards?.length ? cards.map((c) => c?.id).filter(Boolean) : [];
 
       const totalSavingsOnCard =
         cardIds.length > 0 ? await this.paydaySavingService.getCardWiseTotalSaving(cardIds) : [];
 
-      const savingsMap = new Map(
+      const savingsMap = new Map<string, number>(
         (totalSavingsOnCard ?? []).map((entry) => [entry?.cardId, entry?.saving])
       );
 
@@ -339,7 +334,7 @@ export class PayoutTransactionService {
           : (consumerCurrency?.currencyCode ?? 'AED');
 
       const enrollCards = this.formatEnrolledCards(cards, savingsMap, currencyValue);
-      return baseResponseHelper({ data: { enrollCards } }, traceId, 'Success', HttpStatus.OK);
+      return baseResponseHelper({ data: { enrollCards } }, HttpStatus.OK, 'Success');
     } catch (error) {
       this.logger.error('PayoutTransactionService.getAllCardsForCustomer - exception;', {
         error,
@@ -348,9 +343,8 @@ export class PayoutTransactionService {
 
       return baseResponseHelper(
         {},
-        traceId,
-        ErrorMessages.adib.genericError.message,
-        ErrorMessages.adib.genericError.serverStatus
+        ErrorMessages.adib.genericError.serverStatus,
+        ErrorMessages.adib.genericError.message
       );
     }
   }
@@ -416,9 +410,8 @@ export class PayoutTransactionService {
       if (!customer) {
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.customerNotFound.message,
-          ErrorMessages.adib.customerNotFound.serverStatus
+          ErrorMessages.adib.customerNotFound.serverStatus,
+          ErrorMessages.adib.customerNotFound.message
         );
       }
 
@@ -427,9 +420,8 @@ export class PayoutTransactionService {
       if (!transaction) {
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.transactionNotFound.message,
-          ErrorMessages.adib.transactionNotFound.serverStatus
+          ErrorMessages.adib.transactionNotFound.serverStatus,
+          ErrorMessages.adib.transactionNotFound.message
         );
       }
 
@@ -441,7 +433,7 @@ export class PayoutTransactionService {
       );
       this.logger.info('PayoutTransactionService.appeal - appeal response', { appealResponse });
       if (appealResponse?.success?.isSuccess === true) {
-        return baseResponseHelper({}, traceId, 'Success', HttpStatus.OK);
+        return baseResponseHelper({}, HttpStatus.OK, 'Success');
       }
     } catch (error) {
       this.logger.error('PayoutTransactionService.appeal - exception;', {
@@ -452,9 +444,8 @@ export class PayoutTransactionService {
       });
       return baseResponseHelper(
         {},
-        traceId,
-        ErrorMessages.adib.genericError.message,
-        ErrorMessages.adib.genericError.serverStatus
+        ErrorMessages.adib.genericError.serverStatus,
+        ErrorMessages.adib.genericError.message
       );
     }
   }
@@ -846,9 +837,8 @@ export class PayoutTransactionService {
         this.logger.info("PayoutTransactionService.updateCustomerPiiDetails - customer not found");
         return baseResponseHelper(
           {},
-          traceId,
-          ErrorMessages.adib.customerNotFound.message,
-          ErrorMessages.adib.customerNotFound.serverStatus
+          ErrorMessages.adib.customerNotFound.serverStatus,
+          ErrorMessages.adib.customerNotFound.message
         );
       }
 
@@ -877,9 +867,8 @@ export class PayoutTransactionService {
       });
       return baseResponseHelper(
         {},
-        traceId,
-        ErrorMessages.adib.genericError.message,
-        ErrorMessages.adib.genericError.serverStatus
+        ErrorMessages.adib.genericError.serverStatus,
+        ErrorMessages.adib.genericError.message
       );
     }
   }
