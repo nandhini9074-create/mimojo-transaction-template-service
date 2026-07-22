@@ -19,7 +19,7 @@ import { AppealDto } from '../dto/appeal.dto';
 import { CustomerPiiDataDto } from '../dto/customer-pii-data.dto';
 import { GetTransactionsDto } from '../dto/get-transaction.dto';
 import { TransactionMerchantQueryDto } from '../dto/transaction-details.dto';
-import { ApiEndpoint } from '../../decorators/api-swagger';
+import { ApiEndpoint } from 'src/common/decorators/api-swagger';
 import { AppealDtoWithFile } from '../dto/appeal-file.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
@@ -88,7 +88,7 @@ export class TransactionController {
   ): Promise<BaseResponse<{}>> {
     return await this.payoutTransactionService.getAllTransactionForUserCards({
       userId: mimojoCustomerId,
-      pageIndex: body.pageIndex ?? 0,
+      pageIndex: body.pageIndex ?? 1,
       pageSize: body.pageSize ?? 10,
       fromDate: body.fromDate ? new Date(body.fromDate) : null,
       toDate: body.toDate ? new Date(body.toDate) : null,
@@ -118,7 +118,7 @@ export class TransactionController {
     const { transactionSize, merchantSize } = query;
     return await this.payoutTransactionService.getAllTransactionForUserCards({
       userId: mimojoCustomerId,
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: transactionSize,
       merchantPageSize: merchantSize,
       preferredLanguage: headers.language

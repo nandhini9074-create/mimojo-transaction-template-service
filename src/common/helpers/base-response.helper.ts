@@ -8,7 +8,7 @@ import { BaseResponse } from '../dtos/base-response';
  * @param message [Optional] [Default: "Sucess"], message to be returned in the response.
  * @returns {BaseResponse<T>} base response with data and status code.
  */
-export function baseResponseHelper<T>(data: T, statusCode = HttpStatus.OK, message = 'Success'): BaseResponse<T> {
+export function baseResponseHelper<T>(data: T, statusCode: HttpStatus | string = HttpStatus.OK, message = 'Success'): BaseResponse<T> {
   const baseResponse = new BaseResponse<T>();
   baseResponse.data = data;
   baseResponse.statusCode = statusCode;

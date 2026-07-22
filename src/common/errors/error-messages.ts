@@ -44,6 +44,14 @@ export const ErrorMessages = {
       message: 'Unauthorized access.',
       serverStatus: 4103,
     },
+    missingAuthHeader: {
+      message: 'Authorization header is missing.',
+      serverStatus: 4104,
+    },
+    invalidAuthHeader: {
+      message: 'Authorization header is invalid.',
+      serverStatus: 4105,
+    },
     merchantAlreadyRegistered: {
       message: 'Merchant already exist.',
       serverStatus: 4104,
@@ -78,5 +86,29 @@ export const ErrorMessages = {
       message: 'Something went wrong.',
       serverStatus: 500,
     }
+  },
+  scheme: {
+    currencyNotFound: {
+      message: 'Currency not found.',
+      serverStatus: 4503
+    }
+  },
+  transaction: {
+    notFound: {
+      message: 'Transaction not found.',
+      serverStatus: 4601
+    },
+    noReceipt: {
+      message: 'No receipt found.',
+      serverStatus: 4602
+    }
   }
 };
+
+export const ErrorStatusCodes = {
+  dashboardError: {
+    statusCode: 'E4800',
+    message: 'Error in fetching dashboard details',
+  },
+};
+

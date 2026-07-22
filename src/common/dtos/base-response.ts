@@ -1,5 +1,5 @@
 interface IBaseResponse<T> {
-  statusCode?: number;
+  statusCode?: number | string;
   message?: string;
   data?: T;
 }
@@ -9,7 +9,7 @@ export class BaseResponse<T> implements IBaseResponse<T> {
    * http status code [HttpStatus.CREATED, HttpStatus.OK, HttpStatus.BAD_REQUEST, etc.].
    */
 
-  public statusCode?: number = 200;
+  public statusCode?: number | string = 200;
 
   /**
    * message to be returned in the response.
@@ -23,7 +23,7 @@ export class BaseResponse<T> implements IBaseResponse<T> {
 
   public data?: T;
 
-  constructor(data?: T, code = 200, message = 'Success') {
+  constructor(data?: T, code: number | string = 200, message = 'Success') {
     this.data = data;
     this.statusCode = code;
     this.message = message;

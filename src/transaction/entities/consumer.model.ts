@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType, HasOne } from 'sequelize-typescript';
 import { InferAttributes } from 'sequelize';
 import { ConsumerCashback } from './consumer-cashback.model';
-import { GenderEnum } from '../dtos/customer-pii-data.dto';
+import { GenderEnum } from '../dto/customer-pii-data.dto';
 
 @Table({
   timestamps: false,

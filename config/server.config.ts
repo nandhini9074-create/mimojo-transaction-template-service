@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { EnvironmentEnum } from 'env.validation';
 import { EnvKeysEnum } from './env.enum';
-import { IAppConfig, IDatabaseConfig, IGrafanaConfig, IKafkaConfig, IServicesURLs } from './interface';
+import { IAppConfig, IDatabaseConfig, IGrafanaConfig, IKafkaConfig, IServicesURLs, IInternalApis } from './interface';
 import { Dialect } from 'sequelize/types';
 
 export const appConfig = registerAs(
@@ -62,3 +62,21 @@ export const grafanaCredentials = registerAs(
     SERVICE_NAME: process.env[EnvKeysEnum.SERVICE_NAME] ?? '',
   })
 );
+
+export const internalApis = registerAs(
+  'internal-apis',
+  (): IInternalApis => ({
+    NEXT_PAYDAY_API: process.env[EnvKeysEnum.NEXT_PAYDAY_API],
+    CORE_CONSUMER_APPEAL: process.env[EnvKeysEnum.CORE_CONSUMER_APPEAL],
+    NEXT_PAYDAY_PLUS_ONE_DAY_API: process.env[EnvKeysEnum.NEXT_PAYDAY_PLUS_ONE_DAY_API],
+    GET_USER_COUNTRY_URL: process.env[EnvKeysEnum.GET_USER_COUNTRY_URL],
+    SETTLEMENT_STATUS: process.env[EnvKeysEnum.SETTLEMENT_STATUS],
+    SUBSCRIPTION_SERVICE_URL: process.env[EnvKeysEnum.SUBSCRIPTION_SERVICE_URL],
+    MIMOJO_PROFILE_ID: process.env[EnvKeysEnum.MIMOJO_PROFILE_ID],
+    CMS_PROXY_CARDS_URL: process.env[EnvKeysEnum.CMS_PROXY_CARDS_URL],
+    CMS_ADIB_URL: process.env[EnvKeysEnum.CMS_ADIB_URL],
+    CONSUMER_IDENTITY_ADIB_SERVICE_URL: process.env[EnvKeysEnum.CONSUMER_IDENTITY_ADIB_SERVICE_URL],
+    MERCHANT_ADAPTOR_SERVICE_MERCHANTS_API_URL: process.env[EnvKeysEnum.MERCHANT_ADAPTOR_SERVICE_MERCHANTS_API_URL]
+  })
+);
+

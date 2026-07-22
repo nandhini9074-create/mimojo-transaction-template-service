@@ -35,6 +35,8 @@ export interface ApiEndpointOptions<T = any> {
   pathParams?: { name: string; description?: string; type?: any; example?: string }[];
   includeDeviceIdHeader?: boolean;
   includeCurrencyIdHeader?: boolean;
+  includeLanguageHeader?: boolean;
+  queryType?: Type<any>;
 }
 
 export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
@@ -81,6 +83,11 @@ export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
     });
   }
 
+  if (options.queryType) {
+    decorators.push(ApiExtraModels(options.queryType));
+    decorators.push(ApiQuery({ type: options.queryType }));
+  }
+
   if (options.headers?.length) {
     options.headers.forEach(h => {
       decorators.push(
@@ -123,6 +130,17 @@ export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
       ApiHeader({
         name: 'currencyid',
         description: 'Currency identifier',
+        required: false,
+        schema: { type: 'string' },
+      })
+    );
+  }
+
+  if (options.includeLanguageHeader) {
+    decorators.push(
+      ApiHeader({
+        name: 'language',
+        description: 'Preferred language',
         required: false,
         schema: { type: 'string' },
       })

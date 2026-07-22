@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString, validateSync, IsBoolean, IsOptional, IsUrl } from 'class-validator';
 import { plainToInstance, Transform } from 'class-transformer';
-import { IAppConfig, IDatabaseConfig, IGrafanaConfig, IKafkaConfig, IServicesURLs } from './config/interface';
+import { IAppConfig, IDatabaseConfig, IGrafanaConfig, IKafkaConfig, IServicesURLs, IInternalApis } from './config/interface';
 import { Dialect } from 'sequelize/types';
 
 export enum EnvironmentEnum {
@@ -10,7 +10,7 @@ export enum EnvironmentEnum {
   PRODUCTION = 'prod',
 }
 
-export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafanaConfig, IServicesURLs, IKafkaConfig {
+export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafanaConfig, IServicesURLs, IKafkaConfig, IInternalApis {
   //BASE
   @IsNotEmpty()
   @IsEnum(EnvironmentEnum)
@@ -169,6 +169,58 @@ export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafa
   @IsNotEmpty()
   @IsString()
   CONSUMER_IDENTITY_SERVICE_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  RECEIPT_SAS_TOKEN: string;
+
+  @IsNotEmpty()
+  @IsString()
+  RECEIPT_CONTAINER: string;
+
+  @IsNotEmpty()
+  @IsString()
+  NEXT_PAYDAY_API: string;
+
+  @IsNotEmpty()
+  @IsString()
+  CORE_CONSUMER_APPEAL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  NEXT_PAYDAY_PLUS_ONE_DAY_API: string;
+
+  @IsNotEmpty()
+  @IsString()
+  MIMOJO_PROFILE_ID: string;
+
+  @IsNotEmpty()
+  @IsString()
+  GET_USER_COUNTRY_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  SETTLEMENT_STATUS: string;
+
+  @IsNotEmpty()
+  @IsString()
+  SUBSCRIPTION_SERVICE_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  CMS_PROXY_CARDS_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  CMS_ADIB_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  CONSUMER_IDENTITY_ADIB_SERVICE_URL: string;
+
+  @IsNotEmpty()
+  @IsString()
+  MERCHANT_ADAPTOR_SERVICE_MERCHANTS_API_URL: string;
 }
 
 export function validate(config: Record<string, unknown>) {

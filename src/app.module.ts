@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { validate } from 'env.validation';
-import { appConfig, grafanaCredentials, databaseConfig, kafkaConfig, servicesURLs } from '../config/server.config';
+import { appConfig, grafanaCredentials, databaseConfig, kafkaConfig, servicesURLs, internalApis } from '../config/server.config';
 import { databaseBuilder } from '././common/helpers/database';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,11 +14,14 @@ import { LoggerModule, PinoLogger } from 'nestjs-pino';
 import { CustomLoggerModule } from './logger/logger.module';
 import { SampleModule } from './sample/sample.module';
 import { KafkaModule } from './kafka/kafka.module';
+import { TransactionModule } from './transaction/transaction.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig, grafanaCredentials, servicesURLs, kafkaConfig],
+      load: [appConfig, databaseConfig, grafanaCredentials, servicesURLs, kafkaConfig, internalApis],
       cache: true,
       isGlobal: true,
       validate,
@@ -34,6 +37,8 @@ import { KafkaModule } from './kafka/kafka.module';
     SampleModule,
     GenericHttpModule,
     KafkaModule,
+    TransactionModule,
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
   ],
   controllers: [AppController],
   providers: [

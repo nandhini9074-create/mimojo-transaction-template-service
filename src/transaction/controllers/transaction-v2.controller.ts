@@ -10,7 +10,8 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
-  Headers
+  Headers,
+  UseGuards
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseResponse } from 'src/common/dtos/base-response';
@@ -18,11 +19,12 @@ import { baseResponseHelper } from 'src/common/helpers/base-response.helper';
 import { AuthHeaderService } from 'src/auth/decorators/auth-header.service';
 import { ReceiptService } from '../services/receipt.service';
 import { PayoutTransactionService } from '../services/payout-transaction.service';
-import { UploadReceiptImageDto } from '../dtos/upload-receipt-image.dto';
-import { AppealDto } from '../dtos/appeal.dto';
+import { UploadReceiptImageDto } from '../dto/upload-receipt-image.dto';
+import { AppealDto } from '../dto/appeal.dto';
 import { ApiEndpoint } from 'src/common/decorators/api-swagger';
 import { ApiConsumes } from '@nestjs/swagger';
-import { AppealFileDto, UploadReceiptImageFileDto } from '../dtos/swagger/swagger-example.dto';
+import { AppealFileDto, UploadReceiptImageFileDto } from '../dto/swagger/swagger-example.dto';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller({ version: '2', path: 'transaction' })
 export class TransactionV2Controller {
@@ -178,6 +180,7 @@ export class TransactionV2Controller {
   }
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
   @Get('get-details-for-dashboard')
   async getTransactionDetailsForDashboard(): Promise<
     BaseResponse<{ count: number; last24HoursCount: number; totalPayoutsDone: number } | {}>
@@ -187,6 +190,7 @@ export class TransactionV2Controller {
   }
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
   @Get('get-payday-details-for-dashboard')
   async getPaydayDetailsForDashboard(
     @Headers() headers: { timezoneinfo?: string },

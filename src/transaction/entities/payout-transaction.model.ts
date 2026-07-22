@@ -148,6 +148,13 @@ export class PayoutTransaction extends Model<InferAttributes<PayoutTransaction>>
   declare source: string;
 
   @Column({
+    type: DataType.DATE,
+    allowNull: false,
+    defaultValue: DataType.NOW
+  })
+  declare createdOn: Date;
+
+  @Column({
     type: DataType.UUID,
     allowNull: true,
   })

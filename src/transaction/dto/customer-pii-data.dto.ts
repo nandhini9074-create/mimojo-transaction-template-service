@@ -1,39 +1,81 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsEmail } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsOptional, IsString, IsEmail, IsEnum, Length, IsDateString } from 'class-validator';
+
+export enum GenderEnum {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
 
 export class CustomerPiiDataDto {
-  @ApiProperty({ description: 'First name', required: false })
+  @ApiPropertyOptional({
+    description: 'Mobile phone number',
+    maxLength: 20,
+    example: '1234567890',
+  })
   @IsOptional()
   @IsString()
-  firstName?: string;
-
-  @ApiProperty({ description: 'Last name', required: false })
-  @IsOptional()
-  @IsString()
-  lastName?: string;
-
-  @ApiProperty({ description: 'Mobile number', required: false })
-  @IsOptional()
-  @IsString()
+  @Length(0, 20)
   mobile?: string;
 
-  @ApiProperty({ description: 'Email address', required: false })
+  @ApiPropertyOptional({
+    description: 'First name of the customer',
+    maxLength: 100,
+    example: 'John',
+  })
+  @IsOptional()
+  @IsString()
+  @Length(0, 100)
+  firstName?: string;
+
+  @ApiPropertyOptional({
+    description: 'Last name of the customer',
+    maxLength: 100,
+    example: 'Doe',
+  })
+  @IsOptional()
+  @IsString()
+  @Length(0, 100)
+  lastName?: string;
+
+  @ApiPropertyOptional({
+    description: 'Email address of the customer',
+    maxLength: 200,
+    example: 'john.doe@example.com',
+  })
   @IsOptional()
   @IsEmail()
+  @Length(0, 200)
   email?: string;
 
-  @ApiProperty({ description: 'Gender', required: false })
+  @ApiPropertyOptional({
+    description: 'Gender of the customer',
+    enum: GenderEnum,
+    enumName: 'GenderEnum',
+    example: GenderEnum.MALE,
+  })
   @IsOptional()
-  @IsString()
-  gender?: string;
+  @IsEnum(GenderEnum)
+  @Transform(({ value }) => value?.toUpperCase())
+  gender?: GenderEnum;
 
-  @ApiProperty({ description: 'Date of birth', required: false })
+  @ApiPropertyOptional({
+    description: 'Date of birth in ISO 8601 format (YYYY-MM-DD)',
+    example: '1990-01-01',
+    type: String,
+    format: 'date',
+  })
   @IsOptional()
-  @IsString()
+  @IsDateString()
   dateOfBirth?: string;
 
-  @ApiProperty({ description: 'Nationality', required: false })
+  @ApiPropertyOptional({
+    description: 'Nationality of the customer',
+    maxLength: 100,
+    example: 'American',
+  })
   @IsOptional()
   @IsString()
+  @Length(0, 100)
   nationality?: string;
 }
