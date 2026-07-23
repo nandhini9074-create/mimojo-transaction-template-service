@@ -69,6 +69,6 @@ import { PayoutTransactionMeta } from './entities/payout-transaction-meta.model'
       PayoutTransactionMeta,
     ]),
   ],
-  exports: [PayoutTransactionService],
+  exports: [PayoutTransactionService, CoreConsumerProxy, ReceiptService],
 })
 export class TransactionModule {}

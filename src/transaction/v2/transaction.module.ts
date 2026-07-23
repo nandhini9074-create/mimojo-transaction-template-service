@@ -68,6 +68,6 @@ import { ThrottlerGuard } from '@nestjs/throttler';
       CurrencyExchangeRate,
     ]),
   ],
-  exports: [PayoutTransactionService],
+  exports: [PayoutTransactionService, CoreConsumerProxy, ReceiptService],
 })
 export class TransactionV2Module {}
