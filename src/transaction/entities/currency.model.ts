@@ -2,7 +2,7 @@ import { Table, Column, Model, DataType, HasOne, HasMany } from 'sequelize-types
 import { InferAttributes } from 'sequelize';
 import { PayoutTransaction } from './payout-transaction.model';
 import { ConsumerSaving } from 'src/consumer-saving/entities/consumer-saving.model';
-import { PaydayReward } from './payday-rewards.mode';
+import { PaydayReward } from './payday-rewards.model';
 
 @Table({
   timestamps: false,

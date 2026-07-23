@@ -21,7 +21,7 @@ import { Consumer } from './entities/consumer.model';
 import { Currency } from './entities/currency.model';
 import { Group } from './entities/payout-group.model';
 import { GroupTransaction } from './entities/group-transaction.model';
-import { PaydayReward } from './entities/payday-rewards.mode';
+import { PaydayReward } from './entities/payday-rewards.model';
 import { Outlets } from './entities/payout-merchant-outlet.model';
 import { ConsumerCashback } from './entities/consumer-cashback.model';
 import { Payout } from 'src/processed-payout/entities/payout.model';

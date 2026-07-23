@@ -13,7 +13,7 @@ import { Outlets } from '../entities/payout-merchant-outlet.model';
 import { PayoutTransactionStatusEnum } from '../enums/payout-transaction-status.enum';
 import { UploadReceiptImageDto } from '../dto/upload-receipt-image.dto';
 import { Payout } from 'src/processed-payout/entities/payout.model';
-import { PaydayReward } from '../entities/payday-rewards.mode';
+import { PaydayReward } from '../entities/payday-rewards.model';
 import { PaydaySavingService } from 'src/processed-payout/services/payday-saving.service';
 import { PayoutStatusEnum } from '../enums/payout-status.enum';
 import { ConfigService } from '@nestjs/config';
@@ -1099,8 +1099,8 @@ export class PayoutTransactionService {
       group: ['paydayDate']
     });
 
-    const rewardsMap = new Map(
-      rewards.map((reward) => [reward.paydayDate.toString(), reward.rewardAmount])
+    const rewardsMap = new Map<string, number>(
+      rewards.map((reward) => [reward.paydayDate.toString(), Number(reward.rewardAmount)])
     );
 
     const formattedResult = [];
