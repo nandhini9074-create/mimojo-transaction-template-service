@@ -1,4 +1,14 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, validateSync, IsBoolean, IsOptional, IsUrl } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  validateSync,
+  IsBoolean,
+  IsOptional,
+  IsUrl,
+  ValidateIf,
+} from 'class-validator';
 import { plainToInstance, Transform } from 'class-transformer';
 import { IAppConfig, IDatabaseConfig, IGrafanaConfig, IKafkaConfig, IServicesURLs, IInternalApis } from './config/interface';
 import { Dialect } from 'sequelize/types';
@@ -10,7 +20,9 @@ export enum EnvironmentEnum {
   PRODUCTION = 'prod',
 }
 
-export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafanaConfig, IServicesURLs, IKafkaConfig, IInternalApis {
+export class EnvironmentVariables
+  implements IAppConfig, IDatabaseConfig, IGrafanaConfig, IServicesURLs, IKafkaConfig, IInternalApis
+{
   //BASE
   @IsNotEmpty()
   @IsEnum(EnvironmentEnum)
@@ -153,6 +165,7 @@ export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafa
 
   @IsOptional()
   @IsString()
+  @ValidateIf(o => o.GRAVITEE_ENDPOINT && o.GRAVITEE_ENDPOINT !== '')
   @IsUrl()
   GRAVITEE_ENDPOINT: string;
 
@@ -166,59 +179,59 @@ export class EnvironmentVariables implements IAppConfig, IDatabaseConfig, IGrafa
   SERVICE_NAME: string;
 
   //services URLS
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   CONSUMER_IDENTITY_SERVICE_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   RECEIPT_SAS_TOKEN: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   RECEIPT_CONTAINER: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   NEXT_PAYDAY_API: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   CORE_CONSUMER_APPEAL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   NEXT_PAYDAY_PLUS_ONE_DAY_API: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   MIMOJO_PROFILE_ID: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   GET_USER_COUNTRY_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   SETTLEMENT_STATUS: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   SUBSCRIPTION_SERVICE_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   CMS_PROXY_CARDS_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   CMS_ADIB_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   CONSUMER_IDENTITY_ADIB_SERVICE_URL: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   MERCHANT_ADAPTOR_SERVICE_MERCHANTS_API_URL: string;
 }
