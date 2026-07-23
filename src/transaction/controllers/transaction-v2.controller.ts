@@ -11,7 +11,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Headers,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseResponse } from 'src/common/dtos/base-response';
@@ -21,7 +21,7 @@ import { ReceiptService } from '../services/receipt.service';
 import { PayoutTransactionService } from '../services/payout-transaction.service';
 import { UploadReceiptImageDto } from '../dto/upload-receipt-image.dto';
 import { AppealDto } from '../dto/appeal.dto';
-import { ApiEndpoint } from 'src/common/decorators/api-swagger';
+import { ApiEndpoint } from '../../common/decorators/api-swagger';
 import { ApiConsumes } from '@nestjs/swagger';
 import { AppealFileDto, UploadReceiptImageFileDto } from '../dto/swagger/swagger-example.dto';
 import { ThrottlerGuard } from '@nestjs/throttler';
@@ -45,16 +45,14 @@ export class TransactionV2Controller {
         name: 'id',
         description: 'The ID of the receipt image to delete',
         type: 'string',
-        example: '9f7c6f6a-3d2f-4b65-9e8e-123456789abc'
-      }
-    ]
+        example: '9f7c6f6a-3d2f-4b65-9e8e-123456789abc',
+      },
+    ],
   })
   async DeleteReciptImage(@Param('id') id: string, @Headers() headers): Promise<BaseResponse<{}>> {
     await this.receiptService.deleteReceiptTransaction(id);
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
-    return baseResponseHelper(
-      await this.payoutTransactionService.getPaydayTransactionByIdV2(id, headers.language)
-    );
+    return baseResponseHelper(await this.payoutTransactionService.getPaydayTransactionByIdV2(id, headers.language));
   }
 
   @HttpCode(HttpStatus.OK)
@@ -65,7 +63,7 @@ export class TransactionV2Controller {
     summary: 'Upload Receipt Image',
     description: 'Uploads a receipt image.',
     includeLanguageHeader: true,
-    bodyType: UploadReceiptImageFileDto
+    bodyType: UploadReceiptImageFileDto,
   })
   async uploadReceiptImage(
     @UploadedFile() image: Express.Multer.File,
@@ -74,11 +72,7 @@ export class TransactionV2Controller {
   ): Promise<BaseResponse<{}>> {
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
     return baseResponseHelper(
-      await this.payoutTransactionService.uploadReceiptV2(
-        uploadReceiptImage,
-        image,
-        headers.language
-      )
+      await this.payoutTransactionService.uploadReceiptV2(uploadReceiptImage, image, headers.language)
     );
   }
 
@@ -90,21 +84,12 @@ export class TransactionV2Controller {
     summary: 'Appeal Transaction',
     description: 'Submits an appeal for a transaction.',
     includeLanguageHeader: true,
-    bodyType: AppealFileDto
+    bodyType: AppealFileDto,
   })
-  async appealTransaction(
-    @UploadedFile() image: Express.Multer.File,
-    @Body() appealDto: AppealDto,
-    @Headers() headers
-  ) {
+  async appealTransaction(@UploadedFile() image: Express.Multer.File, @Body() appealDto: AppealDto, @Headers() headers) {
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
     return baseResponseHelper(
-      await this.payoutTransactionService.appealV2(
-        appealDto.id,
-        image,
-        appealDto.note,
-        headers.language
-      )
+      await this.payoutTransactionService.appealV2(appealDto.id, image, appealDto.note, headers.language)
     );
   }
 
@@ -113,14 +98,12 @@ export class TransactionV2Controller {
   @ApiEndpoint({
     summary: 'Get Transaction Summary',
     description: 'Retrieves the summary of a transaction.',
-    includeLanguageHeader: true
+    includeLanguageHeader: true,
   })
   async getTransactionSummery(@Headers() headers): Promise<BaseResponse<{}>> {
     let userId = await this.authHeaderService.getUserId(headers.authorization);
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
-    return baseResponseHelper(
-      await this.payoutTransactionService.getTransactionSummary(userId, headers.language)
-    );
+    return baseResponseHelper(await this.payoutTransactionService.getTransactionSummary(userId, headers.language));
   }
 
   @HttpCode(HttpStatus.OK)
@@ -131,8 +114,8 @@ export class TransactionV2Controller {
     includeLanguageHeader: true,
     queries: [
       { name: 'pageIndex', required: true, example: 1 },
-      { name: 'pageSize', required: true, example: 10 }
-    ]
+      { name: 'pageSize', required: true, example: 10 },
+    ],
   })
   async getTransaction(
     @Headers() headers,
@@ -142,12 +125,7 @@ export class TransactionV2Controller {
     let userId = await this.authHeaderService.getUserId(headers.authorization);
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
     return baseResponseHelper(
-      await this.payoutTransactionService.getNextPaydayTransactionV2(
-        userId,
-        pageIndex,
-        pageSize,
-        headers.language
-      )
+      await this.payoutTransactionService.getNextPaydayTransactionV2(userId, pageIndex, pageSize, headers.language)
     );
   }
 
@@ -159,8 +137,8 @@ export class TransactionV2Controller {
     includeLanguageHeader: true,
     queries: [
       { name: 'pageIndex', required: true, example: 1 },
-      { name: 'pageSize', required: true, example: 10 }
-    ]
+      { name: 'pageSize', required: true, example: 10 },
+    ],
   })
   async getProcessedTransaction(
     @Headers() headers,
@@ -170,12 +148,7 @@ export class TransactionV2Controller {
     let userId = await this.authHeaderService.getUserId(headers.authorization);
     //const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);
     return baseResponseHelper(
-      await this.payoutTransactionService.getAllPaydayTransactionV2(
-        userId,
-        pageIndex,
-        pageSize,
-        headers.language
-      )
+      await this.payoutTransactionService.getAllPaydayTransactionV2(userId, pageIndex, pageSize, headers.language)
     );
   }
 
@@ -196,10 +169,7 @@ export class TransactionV2Controller {
     @Headers() headers: { timezoneinfo?: string },
     @Query('paymentDate') paymentDate: string
   ): Promise<BaseResponse<{ successCount: number; failedCount: number } | {}>> {
-    const response = await this.payoutTransactionService.getPaydayDetailsForDashboard(
-      paymentDate,
-      headers.timezoneinfo
-    );
+    const response = await this.payoutTransactionService.getPaydayDetailsForDashboard(paymentDate, headers.timezoneinfo);
     return response;
   }
 
@@ -209,7 +179,7 @@ export class TransactionV2Controller {
     summary: 'Get Transaction By ID',
     description: 'Retrieves a transaction by its ID.',
     includeLanguageHeader: true,
-    pathParams: [{ name: 'id', example: '9f7c6f6a-3d2f-4b65-9e8e-123456789abc', type: 'string' }]
+    pathParams: [{ name: 'id', example: '9f7c6f6a-3d2f-4b65-9e8e-123456789abc', type: 'string' }],
   })
   async getTransactionById(@Param('id') id: string, @Headers() headers): Promise<BaseResponse<{}>> {
     // const preferredLanguage = await this.authHeaderService.getUserPreferredLanguage(headers.authorization);

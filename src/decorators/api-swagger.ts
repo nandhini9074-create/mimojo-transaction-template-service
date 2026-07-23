@@ -33,6 +33,10 @@ export interface ApiEndpointOptions<T = any> {
     example?: any;
   }[];
   pathParams?: { name: string; description?: string; type?: any; example?: string }[];
+  includeDeviceIdHeader?: boolean;
+  includeCurrencyIdHeader?: boolean;
+  includeLanguageHeader?: boolean;
+  queryType?: Type<any>;
   includeIp?: boolean;
   timezoneInfoHeader?: boolean;
 }
@@ -92,6 +96,11 @@ export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
     });
   }
 
+  if (options.queryType) {
+    decorators.push(ApiExtraModels(options.queryType));
+    decorators.push(ApiQuery({ type: options.queryType }));
+  }
+
   if (options.headers?.length) {
     options.headers.forEach(h => {
       decorators.push(
@@ -112,10 +121,43 @@ export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
           name: param.name,
           description: param.description ?? '',
           type: param.type ?? String,
-          example: param.example ?? '',
+          example: param.example,
         })
       );
     });
+  }
+
+  if (options.includeDeviceIdHeader) {
+    decorators.push(
+      ApiHeader({
+        name: 'x-device-id',
+        description: 'Device identifier',
+        required: false,
+        schema: { type: 'string' },
+      })
+    );
+  }
+
+  if (options.includeCurrencyIdHeader) {
+    decorators.push(
+      ApiHeader({
+        name: 'currencyid',
+        description: 'Currency identifier',
+        required: false,
+        schema: { type: 'string' },
+      })
+    );
+  }
+
+  if (options.includeLanguageHeader) {
+    decorators.push(
+      ApiHeader({
+        name: 'language',
+        description: 'Preferred language',
+        required: false,
+        schema: { type: 'string' },
+      })
+    );
   }
 
   decorators.push(

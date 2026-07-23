@@ -37,6 +37,8 @@ export interface ApiEndpointOptions<T = any> {
   includeCurrencyIdHeader?: boolean;
   includeLanguageHeader?: boolean;
   queryType?: Type<any>;
+  includeIp?: boolean;
+  timezoneInfoHeader?: boolean;
 }
 
 export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
@@ -50,6 +52,17 @@ export function ApiEndpoint<T = any>(options: ApiEndpointOptions<T>) {
   );
 
   decorators.push(ApiBearerAuth('access-token'));
+
+  if (options.timezoneInfoHeader) {
+    decorators.push(
+      ApiHeader({
+        name: 'timezoneinfo',
+        description: 'Timezone offset info (e.g., "Asia/Dubai") used for date calculations',
+        required: false,
+        schema: { type: 'string', example: 'Asia/Dubai' },
+      })
+    );
+  }
 
   if (options.bodyType) {
     decorators.push(ApiExtraModels(options.bodyType));
