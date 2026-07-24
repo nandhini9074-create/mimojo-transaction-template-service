@@ -28,7 +28,7 @@ export const databaseBuilder = (configService: ConfigService): SequelizeModuleOp
     password: DB_PASSWORD,
     ssl: DB_SSL,
     dialectOptions: {
-      ssl: DB_SSL ?? { require: false },
+      ...(DB_SSL ? { ssl: { require: true, rejectUnauthorized: false } } : {}),
     },
     sync: {
       force: false,
